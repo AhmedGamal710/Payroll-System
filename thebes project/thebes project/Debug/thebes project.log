@@ -1,0 +1,9 @@
+﻿  thebes project.cpp
+c:\users\mohamed\documents\visual studio 2015\projects\thebes project\thebes project\thebes project.cpp(197): warning C4018: '<': signed/unsigned mismatch
+c:\users\mohamed\documents\visual studio 2015\projects\thebes project\thebes project\thebes project.cpp(208): warning C4018: '<': signed/unsigned mismatch
+c:\users\mohamed\documents\visual studio 2015\projects\thebes project\thebes project\thebes project.cpp(880): warning C4018: '<': signed/unsigned mismatch
+c:\users\mohamed\documents\visual studio 2015\projects\thebes project\thebes project\thebes project.cpp(891): warning C4018: '<': signed/unsigned mismatch
+c:\users\mohamed\documents\visual studio 2015\projects\thebes project\thebes project\thebes project.cpp(902): warning C4018: '<': signed/unsigned mismatch
+c:\users\mohamed\documents\visual studio 2015\projects\thebes project\thebes project\thebes project.cpp(913): warning C4018: '<': signed/unsigned mismatch
+  thebes project.vcxproj -> C:\Users\Mohamed\documents\visual studio 2015\Projects\thebes project\Debug\thebes project.exe
+  thebes project.vcxproj -> C:\Users\Mohamed\documents\visual studio 2015\Projects\thebes project\Debug\thebes project.pdb (Full PDB)

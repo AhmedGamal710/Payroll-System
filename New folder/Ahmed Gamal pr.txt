@@ -1,0 +1,1131 @@
+// Ahmed Gamal
+//Project
+#include "stdafx.h"
+#include <amp_graphics.h> //<graphics.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+#include <cstdlib> 
+#include <algorithm>
+using namespace std;
+
+string employee[10];
+double gross[10];
+double net[10];
+double payrate[10];
+double workedhours[10];
+double tax[10];
+int emp_count = 0;
+
+
+void welcome();
+void verification();    //not anyone can access employees and see their data 
+void menu();
+void add();
+void view_all();
+void print();
+void erase();
+void compute();
+void emp_compute(int);
+void receiveF();
+void sendF();
+void sort(int);
+double calc_tax(double);
+double calc_workedhours(double);
+
+int main()
+{
+	menu();
+
+	return 0;
+}
+void verification()
+{
+	string user, pw;
+	int count = 0;
+
+	do
+	{
+		cout << "User name: ";
+		getline(cin, user);
+		cout << "Password: ";
+		getline(cin, pw);
+		if (user != "admin")
+		{
+			if (pw != "admin")
+			{
+				cout << "Error! try again" << endl;
+				count++;
+				if (count == 3)
+				{
+					cout << "try again in 15 secs" << endl;
+					exit(0);
+				}
+			}
+		}
+		else
+		{
+			if (pw != "admin")
+			{
+				cout << "Error! try again" << endl;
+				count++;
+				if (count == 3)
+				{
+					cout << "try again in 15 secs" << endl;
+					exit(0);
+				}
+			}
+		}
+		if (pw != "admin")
+		{
+			if (user != "admin")
+			{
+				cout << "Error! try again" << endl;
+				count++;
+				if (count == 3)
+				{
+					cout << "try again in 15 secs" << endl;
+					exit(0);
+				}
+			}
+		}
+		else
+		{
+			if (user != "admin")
+			{
+				cout << "Error! try again" << endl;
+				count++;
+				if (count == 3)
+				{
+					cout << "try again in 15 secs" << endl;
+					exit(0);
+				}
+			}
+		}
+	} while (user != "admin" || pw != "admin");
+	system("cls");
+}
+void welcome()
+{
+	cout << setw(72) << "Welcome to thebes payroll" << endl;
+	cout << setw(48);
+	for (int i = 0; i < 25; i++)
+		cout << "~";
+	cout << endl;
+}
+void menu()
+{
+
+	char choice;
+
+	verification();
+	welcome();
+	receiveF();
+
+	do
+	{
+
+		cout << "~~~~~~~~~~~~~~~~\n"
+			"A- Add Employee\n"
+			"C- Compute\n"
+			"P- Print All Employees Data\n"
+			"D- Delete Employee\n"
+      		"H- Help \n"
+			"Q- Quit" << endl;
+
+		cin >> choice;
+		while (cin.get() != '\n')
+		{
+			cout << "Error! try again" << endl;
+			cin.clear();
+			cin.ignore(100, '\n');
+			cin >> choice;
+		}
+
+		switch (choice)
+		{
+		case 'A':
+		case 'a':
+			add();
+			break;
+		case 'C':
+		case 'c':
+			compute();
+			break;
+		case 'P':
+		case 'p':
+			print();
+			break;
+		case 'D':
+		case 'd':
+			erase();
+			break;
+		case 'H':
+		case 'h':
+		cout<<"HaHaHaHaH you really think i will help you ^_^ \n";	
+			break;
+		case 'Q':
+		case 'q':
+                cout<<"Thanxs Dr : Mohamed Samah \n";			
+                        exit(0);
+			break;
+		default:
+			cout << "Error! try again" << endl;
+			break;
+		}
+
+	} while (choice != 'q' && choice != 'Q');
+}
+void add()
+{
+try4:
+	string z5;   //holding name to check availability 
+	system("cls");
+	int choice_1;
+	int choice_2;
+	cout << "Name: ";
+	getline(cin,z5);
+	for (int i = 0; i < emp_count; i++)
+	{
+		if (z5 == employee[i])
+		{
+			cout << "Error! Already excisted, try again" << endl;
+			system("pause");
+			goto try4;
+		}
+	}
+	employee[emp_count] = z5;
+again1:
+	cout << "Do you want to compute his salary ?\n"
+		"1-Yes\n"
+		"2-No\n";
+	cin >> choice_1;
+	while (cin.get() != '\n')
+	{
+		cout << "Error try again ! " << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cout << "Do you want to compute his salary ?\n"
+			"1-Yes\n"
+			"2-No\n";
+		cin >> choice_1;
+	}
+	if (choice_1 == 1)
+	{
+		emp_compute(emp_count);
+		sort(emp_count);
+		cout << "Employee Added Successfully" << endl;
+	}
+	else if (choice_1 == 2)
+	{
+		gross[emp_count] = 0;
+		net[emp_count] = 0;
+		payrate[emp_count] = 0;
+		workedhours[emp_count] = 0;
+		tax[emp_count] = 0;
+		cout << "Employee Added Successfully" << endl;
+	}
+	else
+	{
+		cout << "Error! try again" << endl;
+		goto again1;
+	}
+	emp_count++;
+again2:
+	cout << "Do you want to add another employee ?\n"
+		"1-Yes\n"
+		"2-No\n";
+	cin >> choice_2;
+	while (cin.get() != '\n')
+	{
+		cout << "Error try again ! " << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cout << "Do you want to add another employee ?\n"
+			"1-Yes\n"
+			"2-No\n";
+		cin >> choice_2;
+	}
+	if (choice_2 == 1)
+	{
+		add();
+	}
+	else if (choice_2 == 2)
+	{
+		system("cls");
+	}
+	else
+	{
+		cout << "Error! try again" << endl;
+		goto again2;
+	}
+	sendF();
+}
+void compute()
+{
+	system("cls");
+	char choice_1;
+	int choice_2;
+again4:
+	cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+		"T- Total\t"
+		"G- Gross\t"
+		"N- Net\t"
+		"X- Max\t"
+		"I- Min\t"
+		"M- Main menu" << endl;
+	cin >> choice_1;
+	while (cin.get() != '\n')
+	{
+		cout << "Error! try again" << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+			"T- Total\t"
+			"G- Gross\t"
+			"N- Net\t"
+			"X- Max\t"
+			"I- Min\t"
+			"M- Main menu" << endl;
+		cin >> choice_1;
+	}
+	switch (choice_1)
+	{
+	case 'T':
+	case 't':
+	{
+		double total = 0;
+		for (int i = 0; i < emp_count; i++)
+		{
+			total += gross[i];
+		}
+		cout << "Total company payroll= " << total << endl;
+		system("pause");
+		system("cls");
+		break;
+	}
+	case 'G':
+	case 'g':
+	{
+	again5:
+		system("cls");
+		cout << "1- calculate gross salary for added employee \n"
+			"2- Add a new employee and calculate its gross salary\n"
+			"3- Calculate gross salary for a free lancer" << endl;
+		cin >> choice_2;
+		while (cin.get() != '\n')
+		{
+			cout << "Error! try again" << endl;
+			cin.clear();
+			cin.ignore(100, '\n');
+			cout << "1- calculate gross salary for added employee \n"
+				"2- Add a new employee and calculate its gross \n"
+				"3- Calculate gross for a free lancer (wont be saved)" << endl;
+			cin >> choice_2;
+		}
+		if (choice_2 == 1)
+		{
+		again6:
+			system("cls");
+			int choice_3;
+			view_all();
+			cout << "Choose employee: ";
+			cin >> choice_3;
+			while (cin.get() != '\n')
+			{
+				cout << "Error! try again" << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				view_all();
+				cout << "Choose employee: ";
+				cin >> choice_3;
+			}
+			if (choice_3 > 0 && choice_3 <= emp_count)
+			{
+				system("cls");
+				emp_compute(choice_3 - 1);
+				cout << "Gross salary for " << employee[(choice_3 - 1)] << " = " << gross[(choice_3 - 1)] << endl;
+				sort(choice_3 - 1);
+				system("pause");
+				system("cls");
+			}
+			else
+			{
+				cout << "Error! out of range, try again" << endl;
+				system("pause");
+				goto again6;
+			}
+		}
+		else if (choice_2 == 2)
+		{
+			add();
+			cout << "Gross salary for " << employee[emp_count] << " = " << gross[emp_count] << endl;
+			system("pause");
+			system("cls");
+		}
+		else if (choice_2 == 3)
+		{
+			system("cls");
+			int choice;
+			double gross;
+			double pr;    // pay rate
+			double whours;  // worked hours
+			cout << "Enter employee pay rate: ";
+			cin >> pr;
+			while (cin.get() != '\n')
+			{
+				cout << "Error try again ! " << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				cout << "Enter employee pay rate: ";
+				cin >> pr;
+			}
+		again7:
+			cout << "1- Enter hours worked per month\n"
+				"2- Enter daily hours worked\n";
+			cin >> choice;
+			while (cin.get() != '\n')
+			{
+				cout << "Error try again ! " << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				cout << "1- Enter hours worked per month\n"
+					"2- Enter daily hours worked\n";
+				cin >> choice;
+			}
+			if (choice == 1)
+			{
+				double hours;    //hours worked before processing (ceil or floor)
+				cout << "Hours worked this month: ";
+				cin >> hours;
+				while (cin.get() != '\n')
+				{
+					cout << "Error try again ! " << endl;
+					cin.clear();
+					cin.ignore(100, '\n');
+					cout << "Hours worked this month: ";
+					cin >> hours;
+				}
+				while (hours > 744)
+				{
+					cout << "Error! Exceeded monthly hours limit " << endl;
+					cout << "Hours worked this month: ";
+					cin >> hours;
+				}
+				whours = calc_workedhours(hours);
+				gross = pr * whours;
+
+			}
+			else if (choice == 2)
+			{
+				int n;           //days worked
+				double hours = 0;     //total hours per month
+				double h;            //hours per day
+				cout << "How many days worked this month: ";
+				cin >> n;
+				while (cin.get() != '\n')
+				{
+					cout << "Error try again ! " << endl;
+					cin.clear();
+					cin.ignore(100, '\n');
+					cout << "How many days worked this month: ";
+					cin >> n;
+				}
+				while (n > 31)
+				{
+					cout << "Error! Exceeded month days limit " << endl;
+					cout << "How many days worked this month: ";
+					cin >> n;
+				}
+				for (int i = 1; i <= n; i++)
+				{
+					cout << "day " << i << " worked hours: ";
+					cin >> h;
+					while (cin.get() != '\n')
+					{
+						cout << "Error try again ! " << endl;
+						cin.clear();
+						cin.ignore(100, '\n');
+						cout << "day " << i << " worked hours: ";
+						cin >> h;
+					}
+					while (h > 24)
+					{
+						cout << "Error! Exceeded daily hours limit " << endl;
+						cout << "day " << i << " worked hours: ";
+						cin >> h;
+					}
+					hours += h;
+				}
+				whours = calc_workedhours(hours);
+				gross = pr * whours;
+			}
+			else
+			{
+				cout << "Error! try again" << endl;
+				goto again7;
+			}
+			cout << "Gross salary  = " << gross << endl;
+			system("pause");
+			system("cls");
+		}
+		else
+		{
+			cout << "Error! try again" << endl;
+			goto again5;
+		}
+		break;
+	}
+	case 'N':
+	case 'n':
+	{
+	again8:
+		system("cls");
+		cout << "1- calculate net salary for added employee \n"
+			"2- Add a new employee and calculate its net salary \n"
+			"3- Calculate net salary for a free lancer" << endl;
+		cin >> choice_2;
+		while (cin.get() != '\n')
+		{
+			cout << "Error! try again" << endl;
+			cin.clear();
+			cin.ignore(100, '\n');
+			cout << "1- calculate net salary for added employee \n"
+				"2- Add a new employee and calculate its net salary \n"
+				"3- Calculate net salary for a free lancer" << endl;
+			cin >> choice_2;
+		}
+		if (choice_2 == 1)
+		{
+		again9:
+			int choice_3;
+			system("cls");
+			view_all();
+			cout << "Choose Employee: ";
+			cin >> choice_3;
+			while (cin.get() != '\n')
+			{
+				cout << "Error! try again" << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				view_all();
+				cout << "Choose Employee: ";
+				cin >> choice_3;
+			}
+			if (choice_3 > 0 && choice_3 <= emp_count)
+			{
+				system("cls");
+				emp_compute(choice_3 - 1);
+				cout << "Net salary for " << employee[choice_3 - 1] << " = " << net[choice_3 - 1] << endl;
+				sort(choice_3 - 1);
+				system("pause");
+				system("cls");
+			}
+			else
+			{
+				cout << "Error! out of range, try again" << endl;
+				system("pause");
+				goto again9;
+			}
+		}
+		else if (choice_2 == 2)
+		{
+			add();
+			cout << "Net salary for " << employee[emp_count] << " = " << net[emp_count] << endl;
+			system("pause");
+			system("cls");
+		}
+		else if (choice_2 == 3)
+		{
+			system("cls");
+			int choice;
+			double gross;
+			double tax;
+			double net;
+			double pr;    // pay rate
+			double whours;  // worked hours
+			cout << "Enter employee pay rate: ";
+			cin >> pr;
+			while (cin.get() != '\n')
+			{
+				cout << "Error try again ! " << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				cout << "Enter employee pay rate: ";
+				cin >> pr;
+			}
+		again10:
+			cout << "1- Enter hours worked per month\n"
+				"2- Enter daily hours worked\n";
+			cin >> choice;
+			while (cin.get() != '\n')
+			{
+				cout << "Error try again ! " << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				cout << "1- Enter hours worked per month\n"
+					"2- Enter daily hours worked\n";
+				cin >> choice;
+			}
+
+			if (choice == 1)
+			{
+				double hours;    //hours worked before processing (ceil or floor)
+				cout << "Hours worked this month: ";
+				cin >> hours;
+				while (cin.get() != '\n')
+				{
+					cout << "Error try again ! " << endl;
+					cin.clear();
+					cin.ignore(100, '\n');
+					cout << "Hours worked this month: ";
+					cin >> hours;
+				}
+				while (hours > 744)
+				{
+					cout << "Error! Exceeded monthly hours limit" << endl;
+					cout << "Hours worked this month: ";
+					cin >> hours;
+				}
+				whours = calc_workedhours(hours);
+				gross = pr * whours;
+				tax = calc_tax(gross);
+				net = gross + gross*0.52 - tax;
+
+			}
+			else if (choice == 2)
+			{
+				int n;           //days worked
+				double hours = 0;     //total hours per month
+				double h;            //hours per day
+				cout << "How many days worked this month: ";
+				cin >> n;
+				while (cin.get() != '\n')
+				{
+					cout << "Error try again ! " << endl;
+					cin.clear();
+					cin.ignore(100, '\n');
+					cout << "How many days worked this month: ";
+					cin >> n;
+				}
+				while (n > 31)
+				{
+					cout << "Error! Exceeded month days limit  " << endl;
+					cout << "How many days worked this month: ";
+					cin >> n;
+				}
+				for (int i = 1; i <= n; i++)
+				{
+					cout << "day " << i << " worked hours: ";
+					cin >> h;
+					while (cin.get() != '\n')
+					{
+						cout << "Error try again ! " << endl;
+						cin.clear();
+						cin.ignore(100, '\n');
+						cout << "day " << i << " worked hours: ";
+						cin >> h;
+					}
+					while (h > 24)
+					{
+						cout << "Error! Exceeded daily hours limit " << endl;
+						cout << "day " << i << " worked hours: ";
+						cin >> h;
+					}
+					hours += h;
+				}
+				whours = calc_workedhours(hours);
+				gross = pr * whours;
+				tax = calc_tax(gross);
+				net = gross + gross*0.52 - tax;
+			}
+			else
+			{
+				cout << "Error! try again" << endl;
+				goto again10;
+			}
+			cout << "Net salary  = " << net << endl;
+			system("pause");
+			system("cls");
+		}
+		else
+		{
+			cout << "Error! try again" << endl;
+			goto again8;
+		}
+		break;
+	}
+	case 'X':
+	case 'x':
+	{
+		if (emp_count <= 0)
+		{
+			cout << "No Employees Available" << endl;
+		}
+		else
+		{
+			double max = gross[0];
+			int x;
+			for (int i = 0; i < emp_count; i++)
+			{
+				if (gross[i] > max)
+				{
+					max = gross[i];
+					x = i;
+				}
+			}
+			cout << "Max Salary= " << max << " Payed For: " << employee[x] << endl;
+		}
+		system("pause");
+		system("cls");
+		break;
+
+	}
+	case 'I':
+	case 'i':
+	{
+		if (emp_count <= 0)
+		{
+			cout << "No Employees Available" << endl;
+		}
+		else
+		{
+			double min = gross[0];
+			int z;
+			for (int i = 0; i < emp_count; i++)
+			{
+				if (min > gross[i])
+				{
+					min = gross[i];
+					z = i;
+				}
+			}
+			cout << "Min Salary= " << min << " Payed For: " << employee[z] << endl;
+		}
+		system("pause");
+		system("cls");
+		break;
+	}
+	case 'M':
+	case 'm':
+	{
+		system("cls");
+		break;
+	}
+	default:
+	{
+		cout << "Error! try again" << endl;
+		goto again4;
+		system("cls");
+		break;
+	}
+	}
+	sendF();
+}
+void print()
+{
+
+	if (emp_count <= 0)
+	{
+		cout << "No employees to print " << endl;
+		system("pause");
+		system("cls");
+	}
+	else
+	{
+	try2:
+		system("cls");
+		int choice;
+		cout << "1- Print all emplyees\n"
+			"2- print specific employee\n"
+			"3- Main menu\n";
+		cin >> choice;
+		while (cin.get() != '\n')
+		{
+			cout << "Error! try again" << endl;
+			cin.clear();
+			cin.ignore(100, '\n');
+			cout << "1- Print all emplyees\n"
+				"2- print specific employee\n";
+			cin >> choice;
+		}
+		if (choice == 1)
+		{
+			system("cls");
+			cout << "Name\t\t\tPay rate\tWorked hours\tTax\t\tGross\t\tNet" << endl;
+			for (int i = 0; i < emp_count; i++)
+			{
+				for (int j = i; j <= i; j++)
+				{
+					cout << employee[j] << "\t\t\t" << payrate[j] << "\t\t" << workedhours[j] << "\t\t"
+						<< tax[j] << "\t\t" << gross[j] << "\t\t" << net[j] << endl;
+				}
+				cout << endl;
+			}
+			system("pause");
+			system("cls");
+		}
+		else if (choice == 2)
+		{
+		try3:
+			view_all();
+			int x;					// choose emp to print 
+			cout << "Select employee u want to print: ";
+			cin >> x;
+			while (cin.get() != '\n')
+			{
+				cout << "Error try again ! " << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				cout << "Select employee u want to print: ";
+				cin >> x;
+			}
+			if (x > emp_count)
+			{
+				cout << "Error! Out of range, try again" << endl;
+				system("pause");
+				goto try2;
+			}
+			else
+			{
+				system("cls");
+				cout << "Name\t\tPay rate\tWorked hours\tTax\t\tGross\t\tNet" << endl;
+				cout << employee[x - 1] << "\t\t" << payrate[x - 1] << "\t\t" << workedhours[x - 1] << "\t\t"
+					<< tax[x - 1] << "\t\t" << gross[x - 1] << "\t\t" << net[x - 1] << endl;
+				system("pause");
+				system("cls");
+			}
+		}
+		else if (choice == 3)
+		{
+			system("cls");
+		}
+		else
+		{
+			cout << "Error! try again " << endl;
+			goto try3;
+		}
+	}
+}
+void view_all()
+{
+	system("cls");
+	for (int i = 0; i < emp_count; i++)
+	{
+		cout << i + 1 << " " << employee[i] << endl;
+	}
+	cout << "-~-~-~-~-~-~-~-~-~-~-~-~" << endl;
+}
+void erase()
+{
+	if (emp_count <= 0)
+	{
+		cout << "No employees to delete " << endl;
+		system("pause");
+		system("cls");
+	}
+	else
+	{
+	try1:
+		system("cls");
+		view_all();
+		int choice;
+		int x;					// choose emp to delete 
+		cout << "Select employee u want to delete: ";
+		cin >> x;
+		while (cin.get() != '\n')
+		{
+			cout << "Error try again ! " << endl;
+			cin.clear();
+			cin.ignore(100, '\n');
+			cout << "Select employee u want to delete: ";
+			cin >> x;
+		}
+		if (x > emp_count)
+		{
+			cout << "Error! Out of range, try again" << endl;
+			system("pause");
+			goto try1;
+		}
+		else
+		{
+			system("cls");
+		again:
+			cout << "Are you sure you want to delete " << employee[x - 1] << " ?\n"
+				"1- Yes\n"
+				"2- No\n";
+			cin >> choice;
+			while (cin.get() != '\n')
+			{
+				cout << "Error try again ! " << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				cout << "Are you sure you want to delete " << employee[x - 1] << " ?\n"
+					"1- Yes\n"
+					"2- No\n";
+				cin >> choice;
+			}
+			if (choice == 1)
+			{
+				for (int i = (x - 1); i <= emp_count; i++)
+				{
+					employee[i] = employee[i + 1];
+					gross[i] = gross[i + 1];
+					net[i] = net[i + 1];
+					payrate[i] = payrate[i + 1];
+					workedhours[i] = workedhours[i + 1];
+					tax[i] = tax[i + 1];
+
+				}
+				cout << "Employee deleted Successfully" << endl;
+				emp_count--;
+				system("pause");
+				system("cls");
+			}
+			else if (choice == 2)
+			{
+				system("cls");
+			}
+			else
+			{
+				cout << "Error! try again" << endl;
+				goto again;
+			}
+			sendF();
+		}
+	}
+}
+void emp_compute(int l)
+{
+
+	int choice;
+
+	cout << "Enter employee pay rate: ";
+	cin >> payrate[l];
+	while (cin.get() != '\n')
+	{
+		cout << "Error try again ! " << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cout << "Enter employee pay rate: ";
+		cin >> payrate[l];
+	}
+again3:
+	cout << "1- Enter hours worked per month\n"
+		"2- Enter daily hours worked\n";
+	cin >> choice;
+	while (cin.get() != '\n')
+	{
+		cout << "Error try again ! " << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cout << "1- Enter hours worked per month\n"
+			"2- Enter daily hours worked\n";
+		cin >> choice;
+	}
+	if (choice == 1)
+	{
+		double hours;    //hours worked before processing (ceil or floor)
+		cout << "Hours worked this month: ";
+		cin >> hours;
+		while (cin.get() != '\n')
+		{
+			cout << "Error try again ! " << endl;
+			cin.clear();
+			cin.ignore(100, '\n');
+			cout << "Hours worked this month: ";
+			cin >> hours;
+		}
+		while (hours > 744)
+		{
+			cout << "Error! Exceeded monthly hours limit" << endl;
+			cout << "Hours worked this month: ";
+			cin >> hours;
+		}
+		workedhours[l] = calc_workedhours(hours);
+		gross[l] = payrate[l] * workedhours[l];
+		tax[l] = calc_tax(gross[l]);
+		net[l] = gross[l] + gross[l] * 0.52 - tax[l];
+	}
+	else if (choice == 2)
+	{
+		int n;           //days worked
+		double hours = 0;     //total hours per month
+		double h;            //hours per day
+		cout << "How many days worked this month: ";
+		cin >> n;
+		while (cin.get() != '\n')
+		{
+			cout << "Error try again ! " << endl;
+			cin.clear();
+			cin.ignore(100, '\n');
+			cout << "How many days worked this month: ";
+			cin >> n;
+		}
+		while (n > 31)
+		{
+			cout << "Error! Exceeded month days limit " << endl;
+			cout << "How many days worked this month: ";
+			cin >> n;
+		}
+		for (int i = 1; i <= n; i++)
+		{
+			cout << "day " << i << " worked hours: ";
+			cin >> h;
+			while (cin.get() != '\n')
+			{
+				cout << "Error try again ! " << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				cout << "day " << i << " worked hours: ";
+				cin >> h;
+			}
+			while (h > 24)
+			{
+				cout << "Error! Exceeded daily hours limit " << endl;
+				cout << "day " << i << " worked hours: ";
+				cin >> h;
+			}
+
+			hours += h;
+		}
+		workedhours[l] = calc_workedhours(hours);
+		gross[l] = payrate[l] * workedhours[l];
+		tax[l] = calc_tax(gross[l]);
+		net[l] = gross[l] + gross[l] * 0.52 - tax[l];
+
+
+	}
+	else
+	{
+		cout << "Error! try again" << endl;
+		goto again3;
+	}
+}
+double calc_tax(double k)
+{
+	double tax;
+	if (k > 0 && k < 15000.00)
+	{
+		tax = 0.15 * k;
+	}
+	else if (k >= 15000.00 && k < 30000.00)
+	{
+		tax = 0.16 * (k - 15000.00) + 2250.00;
+	}
+	else if (k >= 30000.00 && k < 50000.00)
+	{
+		tax = 0.18 * (k - 30000.00) + 4650.00;
+	}
+	else if (k >= 50000.00 && k < 80000.00)
+	{
+		tax = 0.20 * (k - 50000.00) + 8250.00;
+	}
+	else if (k >= 80000.00 && k < 150000.00)
+	{
+		tax = 0.25 * (k - 80000.00) + 14250.00;
+	}
+	else
+		tax = 0.00;
+
+	return tax;
+}
+double calc_workedhours(double y)
+{
+	double x = y - int(y);
+	double z;
+	if (x > 0.4)
+		z = ceil(y);
+	else
+		z = floor(y);
+	return z;
+}
+void receiveF()
+{
+	ifstream file;
+	file.open("thebes.txt");
+	int i = 0;
+	while (file >> employee[i] >> gross[i] >> net[i] >> payrate[i] >> workedhours[i] >> tax[i] >> emp_count)
+	{
+		i++;
+	}
+	file.close();
+}
+void sendF()
+{
+	ofstream file;
+	file.open("thebes.txt");
+	for (int i = 0; i < emp_count; i++)
+	{
+		file << employee[i] << endl;
+		file << gross[i] << endl;
+		file << net[i] << endl;
+		file << payrate[i] << endl;
+		file << workedhours[i] << endl;
+		file << tax[i] << endl;
+		file << emp_count << endl;
+	}
+	file.close();
+
+}
+void sort(int y)
+{
+	double x, z, a, b, c;
+	string s;
+	for (int i = 0; i < y; i++)
+	{
+		if (gross[y] > gross[i])
+		{
+			x = gross[y];
+			z = net[y];
+			a = payrate[y];
+			b = workedhours[y];
+			c = tax[y];
+			s = employee[y];
+			for (int j = y; j > i; j--)
+			{
+				gross[j] = gross[j - 1];
+				net[j] = net[j - 1];
+				payrate[j] = payrate[j - 1];
+				tax[j] = tax[j - 1];
+				workedhours[j] = workedhours[j - 1];
+				employee[j] = employee[j - 1];
+			}
+			gross[i] = x;
+			net[i] = z;
+			payrate[i] = a;
+			workedhours[i] = b;
+			tax[i] = c;
+			employee[i] = s;
+		}
+			
+	}
+	for (int i = emp_count-1; i > y; i--)
+	{
+		if (gross[y] < gross[i])
+		{
+			x = gross[y];
+			z = net[y];
+			a = payrate[y];
+			b = workedhours[y];
+			c = tax[y];
+			s = employee[y];
+			for (int j = y; j < i; j++)
+			{
+				gross[j] = gross[j + 1];
+				net[j] = net[j + 1];
+				payrate[j] = payrate[j + 1];
+				tax[j] = tax[j + 1];
+				workedhours[j] = workedhours[j + 1];
+				employee[j] = employee[j + 1];
+			}
+			gross[i] = x;
+			net[i] = z;
+			payrate[i] = a;
+			workedhours[i] = b;
+			tax[i] = c;
+			employee[i] = s;
+		}
+	}
+}
